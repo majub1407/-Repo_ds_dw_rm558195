@@ -5,6 +5,11 @@
 			"referenceName": "origem",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"nome_arquivo": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
