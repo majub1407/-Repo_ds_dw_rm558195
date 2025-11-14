@@ -19,11 +19,31 @@
 					"name": "trabalhofuturo"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "destino",
+						"type": "DatasetReference"
+					},
+					"name": "destino",
+					"rejectedDataLinkedService": {
+						"referenceName": "origem",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
-				"          {Id_Pesquisa;Data_Pesquisa;Satisfacao_Atual;Equilibrio_Vida_Trabalho;Saude_Mental_Status} as string",
+				"          Id_Pesquisa as short,",
+				"          Data_Pesquisa as string,",
+				"          Satisfacao_Atual as short,",
+				"          Equilibrio_Vida_Trabalho as short,",
+				"          Saude_Mental_Status as short",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -38,7 +58,16 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> trabalhofuturo"
+				"     ignoreNoFilesFound: false) ~> trabalhofuturo",
+				"pesquisatrabalho, trabalhofuturo join(pesquisatrabalho@Id_Pesquisa == trabalhofuturo@Id_Pesquisa,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> destino"
 			]
 		}
 	}
