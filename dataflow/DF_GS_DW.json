@@ -1,0 +1,74 @@
+{
+	"name": "DF_GS_DW",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ORIGEM",
+						"type": "DatasetReference"
+					},
+					"name": "pesquisatrabalho"
+				},
+				{
+					"dataset": {
+						"referenceName": "ORIGEM",
+						"type": "DatasetReference"
+					},
+					"name": "trabalhofuturo"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "destino",
+						"type": "DatasetReference"
+					},
+					"name": "destino",
+					"rejectedDataLinkedService": {
+						"referenceName": "origem",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Id_Pesquisa as short,",
+				"          Data_Pesquisa as string,",
+				"          Satisfacao_Atual as short,",
+				"          Equilibrio_Vida_Trabalho as short,",
+				"          Saude_Mental_Status as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> pesquisatrabalho",
+				"source(output(",
+				"          Id_Pesquisa as short,",
+				"          Estado as string,",
+				"          Cidade as string,",
+				"          Genero as string,",
+				"          Idade as short,",
+				"          Profissao as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> trabalhofuturo",
+				"pesquisatrabalho, trabalhofuturo join(pesquisatrabalho@Id_Pesquisa == trabalhofuturo@Id_Pesquisa,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> destino"
+			]
+		}
+	}
+}
