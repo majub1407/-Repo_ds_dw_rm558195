@@ -9,38 +9,36 @@
 						"referenceName": "ORIGEM",
 						"type": "DatasetReference"
 					},
-					"name": "pesquisatrabalhofuturo"
-				},
-				{
-					"dataset": {
-						"referenceName": "ORIGEM",
-						"type": "DatasetReference"
-					},
-					"name": "trabalhofuturocaracteristicas"
-				},
-				{
-					"dataset": {
-						"referenceName": "ORIGEM",
-						"type": "DatasetReference"
-					},
 					"name": "pesquisatrabalho"
+				},
+				{
+					"dataset": {
+						"referenceName": "ORIGEM",
+						"type": "DatasetReference"
+					},
+					"name": "trabalhofuturo"
 				}
 			],
 			"sinks": [],
 			"transformations": [],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> pesquisatrabalhofuturo",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> trabalhofuturocaracteristicas",
 				"source(output(",
 				"          {Id_Pesquisa;Data_Pesquisa;Satisfacao_Atual;Equilibrio_Vida_Trabalho;Saude_Mental_Status} as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> pesquisatrabalho"
+				"     ignoreNoFilesFound: false) ~> pesquisatrabalho",
+				"source(output(",
+				"          Id_Pesquisa as short,",
+				"          Estado as string,",
+				"          Cidade as string,",
+				"          Genero as string,",
+				"          Idade as short,",
+				"          Profissao as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> trabalhofuturo"
 			]
 		}
 	}
